@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AI Resume Strength Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  </head>
+  <body>
+    <header class="app-header">
+      <nav>
+        <strong>Resume Strength Analyzer</strong>
+        <span>Python · Flask · Gemini AI</span>
+      </nav>
+      <section class="hero">
+        <div>
+          <p class="eyebrow">ATS readiness checker</p>
+          <h1>Analyze resume strength before applying.</h1>
+          <p>
+            Upload a resume, paste a job description, and get an ATS score,
+            keyword gaps, skills match, and improvement suggestions.
+          </p>
+        </div>
+        <aside class="hero-panel">
+          <span>Built by</span>
+          <strong>Balla Sowmya Sushma</strong>
+          <p>Aligned with Flask, AI API integration, and deployment skills from the resume.</p>
+        </aside>
+      </section>
+    </header>
+
+    <main>
+      <section class="analyzer-layout">
+        <form id="analyzeForm" class="panel input-panel">
+          <div class="panel-title">
+            <h2>Analyze Resume</h2>
+            <span>PDF or TXT</span>
+          </div>
+
+          <label for="resume">Resume file</label>
+          <input id="resume" name="resume" type="file" accept=".pdf,.txt" required>
+
+          <label for="jobDescription">Target job description</label>
+          <textarea id="jobDescription" name="jobDescription" rows="12" placeholder="Paste the job role, required skills, responsibilities, and qualifications here."></textarea>
+
+          <button id="analyzeButton" type="submit">Generate Analysis</button>
+          <p class="help-text">Gemini feedback is used when `GEMINI_API_KEY` is configured. Otherwise, rule-based feedback is shown.</p>
+        </form>
+
+        <section class="results">
+          <div class="score-card">
+            <span>ATS Score</span>
+            <strong id="atsScore">--</strong>
+            <p id="grade">Upload a resume to begin</p>
+          </div>
+
+          <div class="metric-grid">
+            <article>
+              <span>Sections</span>
+              <strong id="sectionScore">--</strong>
+            </article>
+            <article>
+              <span>Skills</span>
+              <strong id="skillsScore">--</strong>
+            </article>
+            <article>
+              <span>Keywords</span>
+              <strong id="keywordScore">--</strong>
+            </article>
+            <article>
+              <span>Action Verbs</span>
+              <strong id="actionVerbScore">--</strong>
+            </article>
+          </div>
+
+          <div class="panel">
+            <div class="panel-title">
+              <h2>Detected Skills</h2>
+              <span id="skillCount">0 found</span>
+            </div>
+            <div id="skillsList" class="chip-list"></div>
+          </div>
+
+          <div class="two-column">
+            <div class="panel">
+              <div class="panel-title">
+                <h2>Matched Keywords</h2>
+                <span>From job role</span>
+              </div>
+              <div id="matchedKeywords" class="chip-list"></div>
+            </div>
+            <div class="panel">
+              <div class="panel-title">
+                <h2>Missing Keywords</h2>
+                <span>Improve naturally</span>
+              </div>
+              <div id="missingKeywords" class="chip-list warning"></div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-title">
+              <h2>Suggestions</h2>
+              <span>Resume improvements</span>
+            </div>
+            <ul id="suggestions"></ul>
+          </div>
+
+          <div class="panel">
+            <div class="panel-title">
+              <h2>AI Feedback</h2>
+              <span>Gemini or fallback</span>
+            </div>
+            <pre id="aiFeedback">Your personalized feedback will appear here.</pre>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <div id="toast" role="status" aria-live="polite"></div>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+  </body>
+</html>

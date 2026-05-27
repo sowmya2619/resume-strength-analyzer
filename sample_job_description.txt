@@ -1,0 +1,3 @@
+Software Developer Intern
+
+We are looking for a Computer Science student with strong knowledge of Java, Python, REST APIs, Spring Boot, Flask, MySQL, HTML, CSS, JavaScript, Git, data structures, algorithms, and problem-solving. The candidate should be able to design backend services, build web applications, write clean code, debug issues, and work with databases. Experience with deployment, cloud platforms, testing, and AI API integration is a plus.
