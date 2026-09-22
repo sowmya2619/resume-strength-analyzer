@@ -80,3 +80,4 @@ This project demonstrates:
 - ATS scoring logic
 - User-friendly web interface
 - Deployment-ready Python web app structure
+"# resume-strength-analyzer" 
