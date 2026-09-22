@@ -1,123 +1,414 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>AI Resume Strength Analyzer</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-  </head>
-  <body>
-    <header class="app-header">
-      <nav>
-        <strong>Resume Strength Analyzer</strong>
-        <span>Python · Flask · Gemini AI</span>
-      </nav>
-      <section class="hero">
-        <div>
-          <p class="eyebrow">ATS readiness checker</p>
-          <h1>Analyze resume strength before applying.</h1>
-          <p>
-            Upload a resume, paste a job description, and get an ATS score,
-            keyword gaps, skills match, and improvement suggestions.
-          </p>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='styles.css') }}"
+    >
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <div class="container nav">
+
+        <div class="logo">
+            Resume<span>AI</span>
         </div>
-        <aside class="hero-panel">
-          <span>Built by</span>
-          <strong>Balla Sowmya Sushma</strong>
-          <p>Aligned with Flask, AI API integration, and deployment skills from the resume.</p>
-        </aside>
-      </section>
-    </header>
 
-    <main>
-      <section class="analyzer-layout">
-        <form id="analyzeForm" class="panel input-panel">
-          <div class="panel-title">
-            <h2>Analyze Resume</h2>
-            <span>PDF or TXT</span>
-          </div>
+        <div class="nav-text">
+            AI Resume Strength Analyzer
+        </div>
 
-          <label for="resume">Resume file</label>
-          <input id="resume" name="resume" type="file" accept=".pdf,.txt" required>
+    </div>
 
-          <label for="jobDescription">Target job description</label>
-          <textarea id="jobDescription" name="jobDescription" rows="12" placeholder="Paste the job role, required skills, responsibilities, and qualifications here."></textarea>
+</header>
 
-          <button id="analyzeButton" type="submit">Generate Analysis</button>
-          <p class="help-text">Gemini feedback is used when `GEMINI_API_KEY` is configured. Otherwise, rule-based feedback is shown.</p>
+
+<main class="container">
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <p class="hero-label">
+            AI POWERED RESUME ANALYSIS
+        </p>
+
+        <h1>
+            Analyze Your Resume
+            <span>with AI</span>
+        </h1>
+
+        <p>
+            Upload your resume and provide a job description
+            to get ATS scoring, skill analysis, resume strengths,
+            missing skills and AI-powered improvement suggestions.
+        </p>
+
+    </section>
+
+
+    <!-- INPUT AREA -->
+
+    <section class="input-section">
+
+        <form id="analyzeForm">
+
+            <div class="input-grid">
+
+                <!-- RESUME -->
+
+                <div class="card">
+
+                    <h2>Upload Resume</h2>
+
+                    <p class="description">
+                        Upload your PDF, DOCX or TXT resume.
+                    </p>
+
+                    <label
+                        class="upload-box"
+                        for="resume"
+                    >
+
+                        <div class="upload-icon">
+                            ↑
+                        </div>
+
+                        <strong>
+                            Choose your resume
+                        </strong>
+
+                        <span>
+                            PDF, DOCX or TXT
+                        </span>
+
+                        <input
+                            type="file"
+                            id="resume"
+                            name="resume"
+                            accept=".pdf,.docx,.txt"
+                            required
+                        >
+
+                    </label>
+
+                    <div
+                        id="selectedFile"
+                        class="selected-file"
+                    ></div>
+
+                </div>
+
+
+                <!-- JOB DESCRIPTION -->
+
+                <div class="card">
+
+                    <h2>Job Description</h2>
+
+                    <p class="description">
+                        Paste the job description you want
+                        your resume to be analyzed against.
+                    </p>
+
+                    <textarea
+                        id="jobDescription"
+                        name="jobDescription"
+                        placeholder="Paste the job description here..."
+                        required
+                    ></textarea>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                id="analyzeButton"
+                class="analyze-button"
+            >
+                 Generate AI Analysis
+            </button>
+
         </form>
 
-        <section class="results">
-          <div class="score-card">
-            <span>ATS Score</span>
-            <strong id="atsScore">--</strong>
-            <p id="grade">Upload a resume to begin</p>
-          </div>
+    </section>
 
-          <div class="metric-grid">
-            <article>
-              <span>Sections</span>
-              <strong id="sectionScore">--</strong>
-            </article>
-            <article>
-              <span>Skills</span>
-              <strong id="skillsScore">--</strong>
-            </article>
-            <article>
-              <span>Keywords</span>
-              <strong id="keywordScore">--</strong>
-            </article>
-            <article>
-              <span>Action Verbs</span>
-              <strong id="actionVerbScore">--</strong>
-            </article>
-          </div>
 
-          <div class="panel">
-            <div class="panel-title">
-              <h2>Detected Skills</h2>
-              <span id="skillCount">0 found</span>
+    <!-- RESULTS -->
+
+    <section
+        id="results"
+        class="results"
+    >
+
+        <div class="section-heading">
+
+            <p class="hero-label">
+                ANALYSIS RESULTS
+            </p>
+
+            <h2>
+                Resume Analysis
+            </h2>
+
+        </div>
+
+
+        <!-- SCORE CARDS -->
+
+        <div class="score-grid">
+
+            <div class="score-card">
+
+                <span class="score-label">
+                    ATS Score
+                </span>
+
+                <strong
+                    id="atsScore"
+                    class="score"
+                >
+                    0
+                </strong>
+
+                <span>
+                    / 100
+                </span>
+
             </div>
-            <div id="skillsList" class="chip-list"></div>
-          </div>
 
-          <div class="two-column">
-            <div class="panel">
-              <div class="panel-title">
-                <h2>Matched Keywords</h2>
-                <span>From job role</span>
-              </div>
-              <div id="matchedKeywords" class="chip-list"></div>
-            </div>
-            <div class="panel">
-              <div class="panel-title">
-                <h2>Missing Keywords</h2>
-                <span>Improve naturally</span>
-              </div>
-              <div id="missingKeywords" class="chip-list warning"></div>
-            </div>
-          </div>
 
-          <div class="panel">
-            <div class="panel-title">
-              <h2>Suggestions</h2>
-              <span>Resume improvements</span>
-            </div>
-            <ul id="suggestions"></ul>
-          </div>
+            <div class="score-card">
 
-          <div class="panel">
-            <div class="panel-title">
-              <h2>AI Feedback</h2>
-              <span>Gemini or fallback</span>
-            </div>
-            <pre id="aiFeedback">Your personalized feedback will appear here.</pre>
-          </div>
-        </section>
-      </section>
-    </main>
+                <span class="score-label">
+                    Overall Score
+                </span>
 
-    <div id="toast" role="status" aria-live="polite"></div>
-    <script src="{{ url_for('static', filename='app.js') }}"></script>
-  </body>
+                <strong
+                    id="overallScore"
+                    class="score"
+                >
+                    0
+                </strong>
+
+                <span>
+                    / 100
+                </span>
+
+            </div>
+
+
+            <div class="score-card">
+
+                <span class="score-label">
+                    Job Match
+                </span>
+
+                <strong
+                    id="jobMatchScore"
+                    class="score"
+                >
+                    0
+                </strong>
+
+                <span>
+                    / 100
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- SKILL ANALYSIS -->
+
+        <div class="two-column">
+
+            <!-- MATCHED SKILLS -->
+
+            <div class="result-card">
+
+                <div class="card-title-row">
+
+                    <h2>
+                        Matched Skills
+                    </h2>
+
+                    <span
+                        id="matchedCount"
+                        class="count"
+                    >
+                        0
+                    </span>
+
+                </div>
+
+                <p class="description">
+                    Skills already present in your resume
+                    that match the target job.
+                </p>
+
+                <div
+                    id="skillsList"
+                    class="chips"
+                ></div>
+
+            </div>
+
+
+            <!-- MISSING SKILLS -->
+
+            <div class="result-card">
+
+                <div class="card-title-row">
+
+                    <h2>
+                        Missing Skills
+                    </h2>
+
+                    <span
+                        id="missingCount"
+                        class="count"
+                    >
+                        0
+                    </span>
+
+                </div>
+
+                <p class="description">
+                    Important job-related skills that are
+                    not clearly present in your resume.
+                </p>
+
+                <div
+                    id="missingSkills"
+                    class="chips"
+                ></div>
+
+            </div>
+
+        </div>
+
+        <!-- AI RECOMMENDED SKILLS -->
+
+        <div class="result-card recommended-card">
+
+            <div class="ai-heading">
+
+                <span class="ai-badge">
+                    AI
+                </span>
+
+                <h2>
+                    Skills Recommended by AI
+                </h2>
+
+            </div>
+
+            <p class="description">
+               AI identifies important skills that are missing
+    or need strengthening based on the target job.
+    These recommendations can help you improve your
+    technical profile and increase your job match.
+            </p>
+
+            <div
+                id="recommendedSkills"
+                class="learning-grid"
+            ></div>
+
+        </div>
+
+
+        <!-- AI IMPROVEMENT SUGGESTIONS -->
+
+        <div class="result-card">
+
+            <div class="ai-heading">
+
+                <span class="ai-badge">
+                    AI
+                </span>
+
+                <h2>
+                    AI Improvement Suggestions
+                </h2>
+
+            </div>
+            <p class="description">
+                AI analyzes your resume and provides practical
+        suggestions to improve your content, structure,
+        technical presentation, and alignment with the
+        target job description.
+            </p>
+
+            <div id="suggestions"></div>
+
+        </div>
+
+
+    
+
+        
+
+        <!-- FINAL AI FEEDBACK -->
+
+        <div class="result-card final-feedback-card">
+
+            <div class="ai-heading">
+
+                <span class="ai-badge">
+                    AI
+                </span>
+
+                <h2>
+                    Gemini AI Feedback
+                </h2>
+
+            </div>
+            <p class="description">
+                AI provides an overall assessment of your resume,
+        highlighting your strengths, identifying areas for
+        improvement, and explaining how you can better align
+        your resume with the target job.
+            </p>
+
+            <div id="aiFeedback"></div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- TOAST -->
+
+<div
+    id="toast"
+    class="toast"
+></div>
+
+
+<script
+    src="{{ url_for('static', filename='app.js') }}"
+></script>
+
+</body>
+
 </html>
